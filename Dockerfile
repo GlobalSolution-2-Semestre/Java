@@ -1,38 +1,31 @@
-### STAGE 1: Build ###
-# Use a imagem do Maven com a versão do JDK que seu projeto usa (ex: 21)
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+# ==========================
+#  Etapa 1 - Build da aplicação
+# ==========================
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+
+# Cria um diretório de trabalho dentro do container
+WORKDIR /app
+
+# Copia os arquivos de configuração do Maven e o código-fonte
+COPY pom.xml .
+COPY src ./src
+
+# Compila o projeto e gera o .jar (modo produção)
+RUN mvn clean package -DskipTests
+
+# ==========================
+#  Etapa 2 - Execução da aplicação
+# ==========================
+FROM eclipse-temurin:17-jdk-alpine
 
 # Define o diretório de trabalho
 WORKDIR /app
 
-# Copia os arquivos do projeto da raiz (SEM 'mindjava/')
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
+# Copia o .jar gerado da etapa anterior
+COPY --from=build /app/target/*-runner.jar app.jar
 
-# Adiciona permissão de execução
-RUN chmod +x ./mvnw
-
-# Baixa as dependências
-RUN ./mvnw dependency:go-offline
-
-# Copia o código-fonte
-COPY src ./src
-
-# Compila e empacota
-RUN ./mvnw package -DskipTests
-
-
-### STAGE 2: Run ###
-# Use uma imagem JRE leve para rodar a aplicação (ex: JDK 21)
-FROM eclipse-temurin:21-jre-jammy
-
-WORKDIR /app
-
-# O Quarkus roda na porta 8080 por padrão
+# Expõe a porta usada pela aplicação (ajuste se necessário)
 EXPOSE 8080
 
-# Copia a aplicação completa da pasta target
-COPY --from=build /app/target/quarkus-app/ .
-
-# Comando para iniciar
-CMD ["java", "-jar", "quarkus-run.jar"]
+# Comando de execução
+ENTRYPOINT ["java", "-jar", "app.jar"]
