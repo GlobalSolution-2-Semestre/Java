@@ -9,7 +9,6 @@ WORKDIR /app
 COPY mindjava/.mvn/ .mvn
 COPY mindjava/mvnw mindjava/pom.xml ./
 
-# --- CORREÇÃO AQUI ---
 # Adiciona permissão de execução ao Maven Wrapper
 RUN chmod +x ./mvnw
 
@@ -35,9 +34,10 @@ WORKDIR /app
 # O Render irá detectar esta porta automaticamente
 EXPOSE 8080
 
-# Copia o JAR executável do 'build' stage
-# Esta linha NÃO muda, pois /app/target... é o caminho DENTRO do 'build' stage
-COPY --from=build /app/target/quarkus-app/quarkus-run.jar .
+# --- CORREÇÃO AQUI ---
+# Copia a aplicação Quarkus COMPLETA (jar, libs, etc.) do 'build' stage
+# O ponto no final é importante: copia o *conteúdo* de quarkus-app para /app
+COPY --from=build /app/target/quarkus-app/ .
 
-# Comando para iniciar a aplicação
+# Comando para iniciar a aplicação (este comando continua o mesmo)
 CMD ["java", "-jar", "quarkus-run.jar"]
