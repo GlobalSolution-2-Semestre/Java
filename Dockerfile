@@ -9,6 +9,10 @@ WORKDIR /app
 COPY mindjava/.mvn/ .mvn
 COPY mindjava/mvnw mindjava/pom.xml ./
 
+# --- CORREÇÃO AQUI ---
+# Adiciona permissão de execução ao Maven Wrapper
+RUN chmod +x ./mvnw
+
 # Baixa as dependências (cacheia esta camada)
 # Usamos ./mvnw para garantir que é a versão correta do Maven
 RUN ./mvnw dependency:go-offline
