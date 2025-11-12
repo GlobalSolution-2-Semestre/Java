@@ -1,5 +1,12 @@
-*
-!target/*-runner
-!target/*-runner.jar
-!target/lib/*
-!target/quarkus-app/*
+# Pastas de build do Maven
+target/
+# Pastas de IDE
+.idea/
+.vscode/
+# Arquivos de Sistema Operacional
+.DS_Store
+# Arquivos de log
+*.log
+# Arquivos do Git
+.git/
+.gitignore
