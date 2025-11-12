@@ -6,8 +6,8 @@ FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 
 # Copia os arquivos do Maven Wrapper (adicionando o caminho 'mindjava/')
-COPY mindjava/.mvn/ .mvn
-COPY mindjava/mvnw mindjava/pom.xml ./
+COPY .mvn .mvn
+COPY mvnw mindjava/pom.xml ./
 
 # Adiciona permissão de execução ao Maven Wrapper
 RUN chmod +x ./mvnw
@@ -17,7 +17,7 @@ RUN chmod +x ./mvnw
 RUN ./mvnw dependency:go-offline
 
 # Copia o restante do código-fonte (adicionando o caminho 'mindjava/')
-COPY mindjava/src ./src
+COPY src ./src
 
 # Compila e empacota a aplicação
 # Isso criará o JAR do Quarkus em target/quarkus-app/
