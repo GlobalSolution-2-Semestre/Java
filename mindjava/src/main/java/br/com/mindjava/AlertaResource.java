@@ -15,8 +15,7 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class AlertaResource {
 
-    @Inject
-    AlertaBO bo;
+    private AlertaBO bo = new AlertaBO();
 
     @GET
     public Response listar() throws ExcecoesConexao {
@@ -30,25 +29,18 @@ public class AlertaResource {
         URI location = uri.getAbsolutePathBuilder().path(String.valueOf(alerta.getId())).build();
         return Response.created(location).entity(alerta).build();
     }
+
     @DELETE
-
     @Path("/{id}")
-
     public Response deletar(@PathParam("id") int id) throws ExcecoesConexao, BusinessException {
-        System.out.println("[DEBUG] Chegou no Resource com id=" + id);
         boolean deletado = bo.deletar(id);
         if (deletado) {
-            System.out.println("[DEBUG] Alerta com ID " + id + " deletado com sucesso!");
             return Response.noContent().build();
-
         } else {
-            System.out.println("[WARN] Nenhum alerta encontrado com ID " + id);
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Nenhum alerta encontrado com o ID informado.")
                     .build();
-
         }
-
     }
 }
 

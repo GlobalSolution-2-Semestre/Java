@@ -6,7 +6,7 @@ FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 
 # Copia os arquivos do Maven Wrapper (adicionando o caminho 'mindjava/')
-COPY mindjava/.mvn .mvn
+COPY mindjava/.mvn/ .mvn
 COPY mindjava/mvnw mindjava/pom.xml ./
 
 # Adiciona permissão de execução ao Maven Wrapper

@@ -14,8 +14,7 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class CheckinResource {
 
-    @Inject
-    CheckinBO bo;
+    private CheckinBO bo = new CheckinBO();
 
     @GET
     public Response listar() throws ExcecoesConexao {

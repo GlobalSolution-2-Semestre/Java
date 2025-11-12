@@ -4,31 +4,42 @@ import br.com.mindjava.beans.Alerta;
 import br.com.mindjava.dao.AlertaDAO;
 import br.com.mindjava.excecoes.BusinessException;
 import br.com.mindjava.excecoes.ExcecoesConexao;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-
+import br.com.mindjava.conexoes.ConexaoFactory;
+import java.sql.Connection; // Importar
 import java.util.List;
 
-@ApplicationScoped
+
 public class AlertaBO {
 
-    @Inject
-    AlertaDAO dao;
+
+    private final AlertaDAO dao = new AlertaDAO();
 
     public List<Alerta> listar() throws ExcecoesConexao {
-        return dao.listar();
+        try (Connection con = ConexaoFactory.getConnection()) {
+            return dao.listar(con);
+        } catch (Exception e) {
+            throw new ExcecoesConexao("Erro ao listar alertas na camada BO", e);
+        }
     }
 
     public void inserir(Alerta alerta) throws ExcecoesConexao, BusinessException {
         validar(alerta);
-        dao.inserir(alerta);
+        try (Connection con = ConexaoFactory.getConnection()) {
+            dao.inserir(alerta, con);
+        } catch (Exception e) {
+            throw new ExcecoesConexao("Erro ao inserir alerta na camada BO", e);
+        }
     }
 
     public boolean deletar(int id) throws ExcecoesConexao, BusinessException {
         if (id <= 0) {
             throw new BusinessException("ID inválido para exclusão.");
         }
-        return dao.deletar(id); // retorna true ou false do DAO
+        try (Connection con = ConexaoFactory.getConnection()) {
+            return dao.deletar(id, con);
+        } catch (Exception e) {
+            throw new ExcecoesConexao("Erro ao deletar alerta na camada BO", e);
+        }
     }
 
     private void validar(Alerta alerta) throws BusinessException {

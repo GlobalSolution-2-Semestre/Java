@@ -12,9 +12,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class RelatorioResource {
-
-    @Inject
-    RelatorioBO bo;
+    private RelatorioBO bo = new RelatorioBO();
 
     @GET
     public Response listar() throws ExcecoesConexao {
