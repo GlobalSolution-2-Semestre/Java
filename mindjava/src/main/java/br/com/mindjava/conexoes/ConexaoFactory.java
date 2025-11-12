@@ -14,7 +14,6 @@ public class ConexaoFactory {
 
 
     public static Connection getConnection() throws SQLException, ClassNotFoundException {
-        // O código não verifica mais as variáveis de ambiente
         Class.forName(DRIVER);
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }

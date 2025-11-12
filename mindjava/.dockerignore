@@ -1,12 +1,15 @@
-# Pastas de build do Maven
+# Pastas de build do Maven que não queremos na imagem
 target/
-# Pastas de IDE
+
+# Pastas de IDE e Sistema
 .idea/
 .vscode/
-# Arquivos de Sistema Operacional
 .DS_Store
+
 # Arquivos de log
 *.log
-# Arquivos do Gi
+
+# Arquivos Git (não devem ir para a imagem)
 .git/
 .gitignore
+
