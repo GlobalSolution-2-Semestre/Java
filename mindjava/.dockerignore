@@ -7,6 +7,6 @@ target/
 .DS_Store
 # Arquivos de log
 *.log
-# Arquivos do Git
+# Arquivos do Gi
 .git/
 .gitignore
