@@ -5,9 +5,8 @@ import br.com.mindjava.dao.AlertaDAO;
 import br.com.mindjava.excecoes.BusinessException;
 import br.com.mindjava.excecoes.ExcecoesConexao;
 import br.com.mindjava.conexoes.ConexaoFactory;
-import java.sql.Connection; // Importar
+import java.sql.Connection;
 import java.util.List;
-
 
 public class AlertaBO {
 
