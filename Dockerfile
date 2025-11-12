@@ -22,7 +22,9 @@ FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
 # Copia o .jar gerado da etapa anterior
-COPY --from=build /app/target/*-runner.jar app.jar
+COPY --from=build /app/target/hospitaltech-1.0.0-SNAPSHOT-runner.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
 
 # Expõe a porta usada pela aplicação (ajuste se necessário)
 EXPOSE 8080
