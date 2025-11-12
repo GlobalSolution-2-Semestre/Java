@@ -1,4 +1,8 @@
- Define o diretório de trabalho
+### STAGE 1: Build ###
+# Use a imagem do Maven com a versão do JDK que seu projeto usa (ex: 21)
+FROM maven:3.9.6-eclipse-temurin-21 AS build
+
+# Define o diretório de trabalho
 WORKDIR /app
 
 # Copia os arquivos do Maven Wrapper (adicionando o caminho 'mindjava/')
