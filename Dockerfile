@@ -1,31 +1,26 @@
 # ==========================
-# Etapa 1 - Build da aplicação
+# 1) Etapa de build
 # ==========================
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 
-# Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copia os arquivos do projeto
 COPY pom.xml .
+RUN mvn -q -e -DskipTests dependency:go-offline
+
 COPY src ./src
 
-# Executa o build do Maven (gera o JAR com dependências)
-RUN mvn clean package -DskipTests
+RUN mvn -q -DskipTests package
 
 # ==========================
-# Etapa 2 - Execução
+# 2) Etapa de execução
 # ==========================
-FROM eclipse-temurin:17-jdk-alpine
+FROM eclipse-temurin:17-jre
 
-# Define o diretório de trabalho
 WORKDIR /app
 
-# Copia o JAR gerado na etapa anterior
-COPY --from=build /app/target/mindjava-1.0.0-SNAPSHOT-jar-with-dependencies.jar app.jar
+COPY --from=build /app/target/*-runner.jar app.jar
 
-# Expõe a porta usada pela aplicação (ajuste se precisar)
 EXPOSE 8080
 
-# Comando para rodar a aplicação
 ENTRYPOINT ["java", "-jar", "app.jar"]

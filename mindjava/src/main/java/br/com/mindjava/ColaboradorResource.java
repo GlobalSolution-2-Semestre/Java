@@ -1,49 +1,66 @@
-package br.com.mindjava;
+package br.com.mindjava.resources;
+
+import br.com.mindjava.beans.Colaborador;
 import br.com.mindjava.bo.ColaboradorBO;
 import br.com.mindjava.excecoes.BusinessException;
 import br.com.mindjava.excecoes.ExcecoesConexao;
-import br.com.mindjava.beans.Colaborador;
-import jakarta.inject.Inject;
+
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.*;
-import java.net.URI;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.util.List;
 
-@Path("/colaboradores")
-@Produces(MediaType.APPLICATION_JSON)
+@Path("/colaborador")
 @Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class ColaboradorResource {
 
-    private ColaboradorBO bo = new ColaboradorBO();
+    private final ColaboradorBO bo = new ColaboradorBO();
 
     @GET
-    public Response listar() throws ExcecoesConexao {
-        List<Colaborador> lista = bo.listar();
-        return Response.ok(lista).build();
+    public Response listar() {
+        try {
+            List<Colaborador> lista = bo.listar();
+            return Response.ok(lista).build();
+        } catch (ExcecoesConexao e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
     }
 
     @POST
-    public Response inserir(Colaborador c, @Context UriInfo uri) throws ExcecoesConexao, BusinessException {
-        if (c == null) {
-            throw new BusinessException("Requisição inválida: corpo JSON ausente ou mal formatado.");
+    public Response inserir(Colaborador c) {
+        try {
+            bo.inserir(c);
+            return Response.status(Response.Status.CREATED).build();
+        } catch (BusinessException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (ExcecoesConexao e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
-        bo.inserir(c);
-        URI location = uri.getAbsolutePathBuilder().path(String.valueOf(c.getId())).build();
-        return Response.created(location).entity(c).build();
     }
 
     @PUT
-    @Path("/{id}")
-    public Response atualizar(@PathParam("id") int id, Colaborador c) throws ExcecoesConexao, BusinessException {
-        c.setId(id);
-        bo.atualizar(c);
-        return Response.ok(c).build();
+    public Response atualizar(Colaborador c) {
+        try {
+            bo.atualizar(c);
+            return Response.ok().build();
+        } catch (BusinessException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (ExcecoesConexao e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
     }
 
     @DELETE
     @Path("/{id}")
-    public Response deletar(@PathParam("id") int id) throws ExcecoesConexao, BusinessException {
-        bo.deletar(id);
-        return Response.noContent().build();
+    public Response deletar(@PathParam("id") int id) {
+        try {
+            bo.deletar(id);
+            return Response.ok().build();
+        } catch (BusinessException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (ExcecoesConexao e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
     }
 }

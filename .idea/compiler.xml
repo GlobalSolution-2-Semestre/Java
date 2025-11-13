@@ -12,7 +12,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="mindjava" options="-parameters" />
+      <module name="mindjava" options="" />
     </option>
   </component>
 </project>

@@ -30,7 +30,7 @@ public class AlertaBO {
         }
     }
 
-    public void deletar(int id) throws BusinessException, ExcecoesConexao {
+    public boolean deletar(int id) throws BusinessException, ExcecoesConexao {
         if (id <= 0) {
             throw new BusinessException("ID inválido para exclusão.");
         }
@@ -39,6 +39,7 @@ public class AlertaBO {
         } catch (Exception e) {
             throw new ExcecoesConexao("Erro ao deletar alerta na camada BO", e);
         }
+        return false;
     }
 
     private void validar(Alerta alerta) throws BusinessException {
