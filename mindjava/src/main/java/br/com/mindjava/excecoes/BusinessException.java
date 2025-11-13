@@ -1,19 +1,12 @@
 package br.com.mindjava.excecoes;
 
+public class BusinessException extends Exception {
 
-public class BusinessException extends RuntimeException {
-
-    public BusinessException(String message) {
-
-        super(message);
-
+    public BusinessException(String mensagem) {
+        super(mensagem);
     }
 
-    public BusinessException(String message, Throwable cause) {
-
-        super(message, cause);
-
+    public BusinessException(String mensagem, Throwable causa) {
+        super(mensagem, causa);
     }
-
 }
-

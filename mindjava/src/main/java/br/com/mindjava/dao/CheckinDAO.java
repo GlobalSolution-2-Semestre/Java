@@ -1,78 +1,67 @@
 package br.com.mindjava.dao;
+
 import br.com.mindjava.beans.CheckinHumor;
+import br.com.mindjava.excecoes.ExcecoesConexao;
+
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CheckinDAO {
 
-    public void inserir(CheckinHumor ch, Connection cn) {
+    public void inserir(CheckinHumor checkin, Connection con) throws ExcecoesConexao {
         String sql = "INSERT INTO TB_CHECKIN (ID_COLABORADOR, HUMOR, COMENTARIO) VALUES (?, ?, ?)";
-        PreparedStatement ps = null;
-        try {
-            ps = cn.prepareStatement(sql);
-            ps.setInt(1, ch.getIdColaborador());
-            ps.setString(2, ch.getHumor());
-            ps.setString(3, ch.getComentario());
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, checkin.getIdColaborador());
+            ps.setString(2, checkin.getHumor());
+            ps.setString(3, checkin.getComentario());
             ps.executeUpdate();
-            System.out.println(" Check-in inserido com sucesso!");
         } catch (SQLException e) {
-            System.err.println(" Erro ao inserir check-in: " + e.getMessage());
-        } finally {
-            try {
-                if (ps != null) ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            throw new ExcecoesConexao("Erro ao inserir check-in.", e);
         }
     }
 
-    public List<CheckinHumor> listar(Connection cn) {
-        List<CheckinHumor> lista = new ArrayList<>();
-        String sql = "SELECT * FROM TB_CHECKIN ORDER BY DATA_REGISTRO DESC";
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            ps = cn.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                CheckinHumor ch = new CheckinHumor();
-                ch.setId(rs.getInt("ID_CHECKIN"));
-                ch.setIdColaborador(rs.getInt("ID_COLABORADOR"));
-                ch.setDataRegistro(rs.getDate("DATA_REGISTRO").toLocalDate());
-                ch.setHumor(rs.getString("HUMOR"));
-                ch.setComentario(rs.getString("COMENTARIO"));
-                lista.add(ch);
-            }
-        } catch (SQLException e) {
-            System.err.println(" Erro ao listar check-ins: " + e.getMessage());
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return lista;
-    }
-
-    public void deletar(int id, Connection cn) {
+    public void deletar(int id, Connection con) throws ExcecoesConexao {
         String sql = "DELETE FROM TB_CHECKIN WHERE ID_CHECKIN = ?";
-        PreparedStatement ps = null;
-        try {
-            ps = cn.prepareStatement(sql);
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
             ps.executeUpdate();
-            System.out.println(" Check-in removido com sucesso!");
         } catch (SQLException e) {
-            System.err.println(" Erro ao deletar check-in: " + e.getMessage());
-        } finally {
-            try {
-                if (ps != null) ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            throw new ExcecoesConexao("Erro ao deletar check-in.", e);
         }
+    }
+
+    public List<CheckinHumor> listar(Connection con) throws ExcecoesConexao {
+        String sql = "SELECT ID_CHECKIN, ID_COLABORADOR, DATA_REGISTRO, HUMOR, COMENTARIO FROM TB_CHECKIN";
+        List<CheckinHumor> lista = new ArrayList<>();
+
+        try (PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                CheckinHumor c = new CheckinHumor();
+                c.setId(rs.getInt("ID_CHECKIN"));
+                c.setIdColaborador(rs.getInt("ID_COLABORADOR"));
+                c.setHumor(rs.getString("HUMOR"));
+                c.setComentario(rs.getString("COMENTARIO"));
+
+                Date dt = rs.getDate("DATA_REGISTRO");
+                if (dt != null) {
+                    c.setDataRegistro(LocalDate.from(LocalDateTime.ofInstant(dt.toInstant(), ZoneId.systemDefault())));
+                }
+
+                lista.add(c);
+            }
+
+        } catch (SQLException e) {
+            throw new ExcecoesConexao("Erro ao listar check-ins.", e);
+        }
+
+        return lista;
     }
 }

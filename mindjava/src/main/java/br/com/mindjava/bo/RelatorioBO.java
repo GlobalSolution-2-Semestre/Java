@@ -5,44 +5,47 @@ import br.com.mindjava.conexoes.ConexaoFactory;
 import br.com.mindjava.dao.RelatorioDAO;
 import br.com.mindjava.excecoes.BusinessException;
 import br.com.mindjava.excecoes.ExcecoesConexao;
+
 import java.sql.Connection;
 import java.util.List;
-
 
 public class RelatorioBO {
 
     private final RelatorioDAO dao = new RelatorioDAO();
 
-    public List<Relatorio> listar() throws BusinessException, ExcecoesConexao {
-        try (Connection cn = ConexaoFactory.getConnection()) {
-            return dao.listar(cn);
+    public List<Relatorio> listar() throws ExcecoesConexao {
+        try (Connection con = ConexaoFactory.getConnection()) {
+            return dao.listar(con);
         } catch (Exception e) {
-            throw new BusinessException("Erro ao listar relatórios: " + e.getMessage());
+            throw new ExcecoesConexao("Erro ao listar relatórios.", e);
         }
     }
 
-    public void inserir(Relatorio relatorio) throws BusinessException, ExcecoesConexao {
-        validarRelatorio(relatorio, false);
-        try (Connection cn = ConexaoFactory.getConnection()) {
-            dao.inserir(relatorio, cn);
+    public void inserir(Relatorio r) throws BusinessException, ExcecoesConexao {
+        validar(r, false);
+        try (Connection con = ConexaoFactory.getConnection()) {
+            dao.inserir(r, con);
         } catch (Exception e) {
-            throw new BusinessException("Erro ao inserir relatório: " + e.getMessage());
+            throw new ExcecoesConexao("Erro ao inserir relatório.", e);
         }
     }
 
-    public void deletar(int idRelatorio) throws BusinessException, ExcecoesConexao {
-        if (idRelatorio <= 0) throw new BusinessException("ID de relatório inválido.");
-        try (Connection cn = ConexaoFactory.getConnection()) {
-            dao.deletar(idRelatorio, cn);
+    public void deletar(int id) throws BusinessException, ExcecoesConexao {
+        if (id <= 0) {
+            throw new BusinessException("ID inválido para exclusão.");
+        }
+        try (Connection con = ConexaoFactory.getConnection()) {
+            dao.deletar(id, con);
         } catch (Exception e) {
-            throw new BusinessException("Erro ao excluir relatório: " + e.getMessage());
+            throw new ExcecoesConexao("Erro ao excluir relatório.", e);
         }
     }
 
-    private void validarRelatorio(Relatorio r, boolean exigirId) throws BusinessException {
-        if (r == null) throw new BusinessException("Objeto Relatório não pode ser nulo.");
+    private void validar(Relatorio r, boolean exigirId) throws BusinessException {
+        if (r == null)
+            throw new BusinessException("Objeto Relatório não pode ser nulo.");
         if (exigirId && r.getId() <= 0)
-            throw new BusinessException("ID de relatório inválido para atualização.");
+            throw new BusinessException("ID inválido para atualização.");
         if (r.getIdColaborador() <= 0)
             throw new BusinessException("ID de colaborador é obrigatório.");
         if (r.getMediaHumor() < 0 || r.getMediaHumor() > 10)
