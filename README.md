@@ -1,6 +1,6 @@
 # MindJava API - Plataforma de Bem-Estar
 
-Este projeto é o backend (API RESTful) da plataforma MindTrack. Ele foi construído em Java 21 e Quarkus para fornecer endpoints de alta performance para o gerenciamento de colaboradores, check-ins de humor, alertas e relatórios.
+Este projeto é o backend (API RESTful) da plataforma MindTrack. Ele foi construído em Java 17 e Quarkus para fornecer endpoints de alta performance para o gerenciamento de colaboradores, check-ins de humor, alertas e relatórios.
 
 ## 👩‍💻 Integrantes
 
