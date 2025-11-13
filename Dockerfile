@@ -1,4 +1,6 @@
 # ============================
+#  ETAPA 1 - BUILD COM MAVEN
+# ============================
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 
 WORKDIR /app
@@ -10,11 +12,14 @@ COPY src ./src
 
 RUN mvn clean package -DskipTests
 
+# ============================
+#  ETAPA 2 - RUNTIME (FINAL)
+# ============================
 FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
-COPY --from=build /app/target/mindjava-1.0.0-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/*-runner.jar app.jar
 
 EXPOSE 8080
 

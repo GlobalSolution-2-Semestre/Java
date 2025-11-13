@@ -10,13 +10,21 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
+        <!-- JDK usado pelo Quarkus -->
         <maven.compiler.release>17</maven.compiler.release>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- BOM do Quarkus -->
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.version>3.29.2</quarkus.platform.version>
 
+        <!-- GERA FAT JAR (uber-jar) – OBRIGATÓRIO NO RENDER -->
+        <quarkus.package.type>uber-jar</quarkus.package.type>
+
+        <!-- Plugin de testes -->
         <surefire-plugin.version>3.5.4</surefire-plugin.version>
     </properties>
 
@@ -33,13 +41,14 @@
     </dependencyManagement>
 
     <dependencies>
+
         <!-- REST -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-rest</artifactId>
         </dependency>
 
-        <!-- JSON -->
+        <!-- JSON (Jackson) -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-rest-jackson</artifactId>
@@ -57,21 +66,24 @@
             <artifactId>quarkus-jdbc-oracle</artifactId>
         </dependency>
 
-        <!-- Testes -->
+        <!-- TESTES -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Plugin do Quarkus -->
             <plugin>
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
@@ -88,10 +100,12 @@
                 </executions>
             </plugin>
 
+            <!-- Tests plugin -->
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire-plugin.version}</version>
             </plugin>
+
         </plugins>
     </build>
 
