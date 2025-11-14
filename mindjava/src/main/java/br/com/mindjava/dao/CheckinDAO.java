@@ -5,8 +5,7 @@ import br.com.mindjava.excecoes.ExcecoesConexao;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+// Removidas importações desnecessárias de LocalDateTime e ZoneId
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,10 +49,14 @@ public class CheckinDAO {
                 c.setHumor(rs.getString("HUMOR"));
                 c.setComentario(rs.getString("COMENTARIO"));
 
+                // --- CORREÇÃO AQUI ---
+                // Pega o java.sql.Date do banco
                 Date dt = rs.getDate("DATA_REGISTRO");
                 if (dt != null) {
-                    c.setDataRegistro(LocalDate.from(LocalDateTime.ofInstant(dt.toInstant(), ZoneId.systemDefault())));
+                    // Converte diretamente para java.time.LocalDate
+                    c.setDataRegistro(dt.toLocalDate());
                 }
+                // --- FIM DA CORREÇÃO ---
 
                 lista.add(c);
             }

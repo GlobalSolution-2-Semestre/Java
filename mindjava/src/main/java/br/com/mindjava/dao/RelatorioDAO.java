@@ -2,11 +2,8 @@ package br.com.mindjava.dao;
 
 import br.com.mindjava.beans.Relatorio;
 import br.com.mindjava.excecoes.ExcecoesConexao;
-
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,10 +47,14 @@ public class RelatorioDAO {
                 r.setMediaHumor(rs.getDouble("MEDIA_HUMOR"));
                 r.setResumoAnalise(rs.getString("RESUMO"));
 
+
+
                 Date dt = rs.getDate("DATA_GERACAO");
                 if (dt != null) {
-                    r.setDataGeracao(LocalDate.from(LocalDateTime.ofInstant(dt.toInstant(), ZoneId.systemDefault())));
+                    // Converte diretamente para java.time.LocalDate
+                    r.setDataGeracao(dt.toLocalDate());
                 }
+
 
                 lista.add(r);
             }

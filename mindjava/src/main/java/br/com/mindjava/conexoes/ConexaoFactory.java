@@ -6,13 +6,13 @@ import java.sql.SQLException;
 
 public class ConexaoFactory {
 
+    // (As suas credenciais estão corretas)
     private static final String URL = "jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl";
     private static final String USER = "rm562396";
     private static final String PASSWORD = "230407";
-    private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
 
-    public static Connection getConnection() throws ClassNotFoundException, SQLException {
-        Class.forName(DRIVER);
+
+    public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }
