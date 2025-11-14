@@ -3,10 +3,8 @@
 Este projeto é o backend (API RESTful) da plataforma MindTrack. Ele foi construído em Java 17 e Quarkus para fornecer endpoints de alta performance para o gerenciamento de colaboradores, check-ins de humor, alertas e relatórios.
 
 ## 👩‍💻 Integrantes
-
-* **Nome:** Guilherme Macedo Martins | **RM:** 562396 | **Turma:** 1TDSPF
-* **Nome:** Pedro Henrique Luiz Alves Duarte | **RM:** 563405 | **Turma:** 1TDSPF
-
+- **Pedro Henrique Luiz Alves Duarte**  
+- **Guilherme Macedo Martins** 
 ---
 
 ## 🚀 Instruções de Instalação e Execução
