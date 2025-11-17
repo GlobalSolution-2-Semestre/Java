@@ -10,12 +10,12 @@ import java.util.List;
 public class AlertaDAO {
 
     public void inserir(Alerta alerta, Connection cn) throws ExcecoesConexao {
-        String sql = "INSERT INTO TB_ALERTA (ID_ALERTA, TIPO_ALERTA, ID_COLABORADOR) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO TB_ALERTA ( TIPO_ALERTA, ID_COLABORADOR , DESCRICAO) VALUES (?, ?, ?)";
 
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setInt(1, alerta.getId());
-            ps.setString(2, alerta.getTipoAlerta());
-            ps.setInt(3, alerta.getIdColaborador());
+            ps.setString(1, alerta.getTipoAlerta());
+            ps.setInt(2, alerta.getIdColaborador());
+            ps.setString(3, alerta.getDescricao());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new ExcecoesConexao("Erro ao inserir alerta.", e);
