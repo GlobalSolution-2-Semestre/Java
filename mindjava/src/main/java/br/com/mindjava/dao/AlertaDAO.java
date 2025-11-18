@@ -34,7 +34,7 @@ public class AlertaDAO {
     }
 
     public List<Alerta> listar(Connection cn) throws ExcecoesConexao {
-        String sql = "SELECT ID_ALERTA, TIPO_ALERTA, ID_COLABORADOR FROM TB_ALERTA";
+        String sql = "SELECT ID_ALERTA, TIPO_ALERTA, ID_COLABORADOR, DESCRICAO, DATA_ENVIO FROM TB_ALERTA";
         List<Alerta> lista = new ArrayList<>();
 
         try (PreparedStatement ps = cn.prepareStatement(sql);
@@ -45,6 +45,8 @@ public class AlertaDAO {
                 a.setId(rs.getInt("ID_ALERTA"));
                 a.setTipoAlerta(rs.getString("TIPO_ALERTA"));
                 a.setIdColaborador(rs.getInt("ID_COLABORADOR"));
+
+                a.setDescricao(rs.getString("DESCRICAO"));
                 lista.add(a);
             }
 
