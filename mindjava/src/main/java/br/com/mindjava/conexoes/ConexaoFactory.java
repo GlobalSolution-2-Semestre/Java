@@ -8,8 +8,8 @@ public class ConexaoFactory {
 
     // (As suas credenciais estão corretas)
     private static final String URL = "jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl";
-    private static final String USER = "rm562396";
-    private static final String PASSWORD = "230407";
+    private static final String USER = "rm563405";
+    private static final String PASSWORD = "250307";
 
 
     public static Connection getConnection() throws SQLException {
